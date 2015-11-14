@@ -1,14 +1,10 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
-```{r}
+
+```r
 library(ggplot2)
 ## Changing directory/language and reading file
 current_dir <- getwd()
@@ -17,7 +13,13 @@ work_dir <- "C:/R_Programming/Reproducible/Git/RepData_PeerAssessment1"
 setwd(work_dir)
 current_language <- Sys.getlocale("LC_TIME")
 Sys.setlocale("LC_TIME", "English")
+```
 
+```
+## [1] "English_United States.1252"
+```
+
+```r
 activity <- read.csv("activity.csv")
 
 ## Creating and filling new column "day"
@@ -39,7 +41,8 @@ activity$day <- days
 
 ## What is mean total number of steps taken per day?
 
-```{r}
+
+```r
 ## Summarizing and calculating total number of steps per day
 steps_per_day <- aggregate(activity$steps, by=list(activity$day), FUN=sum)
 names(steps_per_day) <- c("day","count_steps")
@@ -50,20 +53,27 @@ hist(steps_per_day$count_steps, ylim=c(0,40))
 dev.off()
 ```
 
+```
+## png 
+##   2
+```
+
 ![alt text](figures/hist.png)
 
-```{r}
+
+```r
 ## Calculating mean and median
 mean_steps <- mean(steps_per_day$count_steps, na.rm=TRUE)
 median_steps <- median(steps_per_day$count_steps, na.rm=TRUE)
 ```
 
-### ---> Mean: `r format(round(mean_steps, 2), nsmall = 2)`
-### ---> Median: `r median_steps`
+### ---> Mean: 10766.19
+### ---> Median: 10765
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 ## Summarizing and calculating mean number of steps per 5-minute interval
 steps_per_interval <- aggregate(activity$steps, by=list(activity$interval), FUN=mean, na.rm=TRUE)
 names(steps_per_interval) <- c("interval","mean_interval")
@@ -72,18 +82,22 @@ names(steps_per_interval) <- c("interval","mean_interval")
 with(steps_per_interval, plot(interval, mean_interval, type="l"))
 ```
 
-```{r}
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+
+```r
 ## Finding maximum interval
 maximum_interval_mean <- max(steps_per_interval$mean_interval)
 maximum_interval <- 
     steps_per_interval$interval[steps_per_interval$mean_interval == maximum_interval_mean]
 ```
 
-### ---> Interval with maximum average number of steps: `r maximum_interval`
+### ---> Interval with maximum average number of steps: 835
 
 ## Imputing missing values
 
-```{r}
+
+```r
 ## Number of rows with NA
 rows_with_na <- length(activity$steps[is.na(activity$steps)])
 
@@ -97,7 +111,8 @@ for (i in 1:total_count)
 ```
 
 
-```{r}
+
+```r
 ## Summarizing and calculating total number of steps per day
 steps_per_day_new <- aggregate(activity_new$steps, by=list(activity_new$day), FUN=sum)
 names(steps_per_day_new) <- c("day","count_steps")
@@ -108,16 +123,22 @@ hist(steps_per_day_new$count_steps, ylim=c(0,40))
 dev.off()
 ```
 
+```
+## png 
+##   2
+```
+
 ![alt text](figures/hist_fill.png)
 
-```{r}
+
+```r
 ## Calculating new mean and median
 mean_steps_new <- mean(steps_per_day_new$count_steps, na.rm=TRUE)
 median_steps_new <- median(steps_per_day_new$count_steps, na.rm=TRUE)
 ```
 
-### ---> Mean: `r format(round(mean_steps_new, 2), nsmall = 2)`
-### ---> Median: `r format(round(median_steps_new, 2), nsmall = 2)`
+### ---> Mean: 10766.19
+### ---> Median: 10766.19
 
 ### The mean value remains the same, because the NA's were replaced by the mean values for each interval, so that the total number for each day with missing values will be exactly the mean.
 ### However, the median changed, and now its value is equal to the mean, as the total numbers for all those missing data days became the same.
@@ -125,7 +146,8 @@ median_steps_new <- median(steps_per_day_new$count_steps, na.rm=TRUE)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 ## Adding new factor to dataset activity_new
 for (i in 1:total_count)
   if (weekdays(as.Date(activity_new$date[i]),abbreviate=TRUE) %in% c("Sat","Sun"))
@@ -139,12 +161,18 @@ steps_per_interval_weekfactor <-
 names(steps_per_interval_weekfactor) <- c("weekfactor","interval","mean_steps")
 ```
 
-```{r}
+
+```r
 ## Plotting panel
 png(filename="figures/panel.png", width = 640, height = 640)
 qplot(interval,mean_steps,data=steps_per_interval_weekfactor,facets=weekfactor~.,
       geom="line",ylab="Number of Steps")
 dev.off()
+```
+
+```
+## png 
+##   2
 ```
 
 ![alt text](figures/panel.png)
