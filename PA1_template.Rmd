@@ -83,6 +83,9 @@ maximum_interval <-
 
 ## Imputing missing values
 
+### Strategy for filling:
+### The missing values were replaced by the mean values calculated for each 5-minute interval
+
 ```{r}
 ## Number of rows with NA
 rows_with_na <- length(activity$steps[is.na(activity$steps)])
@@ -121,7 +124,7 @@ median_steps_new <- median(steps_per_day_new$count_steps, na.rm=TRUE)
 
 ### The mean value remains the same, because the NA's were replaced by the mean values for each interval, so that the total number for each day with missing values will be exactly the mean.
 ### However, the median changed, and now its value is equal to the mean, as the total numbers for all those missing data days became the same.
-
+### Regarding the histogram, it may be seen that the center range (10000-15000), which contains the mean value, has a higher frequency, because there are more days with the average number os steps
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -151,4 +154,8 @@ dev.off()
 
 ### As shown by the plot above, there are significant differences in activity patterns between weekdays and weekends
 
-
+```{r}
+## Recover directory and language
+setwd(current_dir)
+Sys.setlocale("LC_TIME", current_language)
+```
