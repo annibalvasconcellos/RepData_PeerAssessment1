@@ -39,7 +39,10 @@ for (i in 1:total_count)
 activity$day <- days
 ```
 
+
 ## What is mean total number of steps taken per day?
+
+### Summarizing data and plotting histogram
 
 
 ```r
@@ -49,7 +52,7 @@ names(steps_per_day) <- c("day","count_steps")
 
 ## Plotting histogram
 png(filename="figures/hist.png", width = 480, height = 480)
-hist(steps_per_day$count_steps, ylim=c(0,40))
+hist(steps_per_day$count_steps, ylim=c(0,40), main = "Histogram of number of steps per day")
 dev.off()
 ```
 
@@ -70,7 +73,10 @@ median_steps <- median(steps_per_day$count_steps, na.rm=TRUE)
 ### ---> Mean: 10766.19
 ### ---> Median: 10765
 
+
 ## What is the average daily activity pattern?
+
+### Summarizing data and plotting graphics
 
 
 ```r
@@ -79,7 +85,7 @@ steps_per_interval <- aggregate(activity$steps, by=list(activity$interval), FUN=
 names(steps_per_interval) <- c("interval","mean_interval")
 
 ## Line Plot
-with(steps_per_interval, plot(interval, mean_interval, type="l"))
+with(steps_per_interval, plot(interval, mean_interval, type="l", ylab="average number of steps"))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
@@ -94,10 +100,11 @@ maximum_interval <-
 
 ### ---> Interval with maximum average number of steps: 835
 
+
 ## Imputing missing values
 
 ### Strategy for filling:
-### The missing values were replaced by the mean values calculated for each 5-minute interval
+### The missing values will be replaced by the mean values calculated for each 5-minute interval
 
 
 ```r
@@ -122,7 +129,8 @@ names(steps_per_day_new) <- c("day","count_steps")
 
 ## Plotting histogram after filling
 png(filename="figures/hist_fill.png", width = 480, height = 480)
-hist(steps_per_day_new$count_steps, ylim=c(0,40))
+hist(steps_per_day_new$count_steps, ylim=c(0,40), 
+     main = "Histogram of number of steps per day - after filling")
 dev.off()
 ```
 
@@ -147,7 +155,10 @@ median_steps_new <- median(steps_per_day_new$count_steps, na.rm=TRUE)
 ### However, the median changed, and now its value is equal to the mean, as the total numbers for all those missing data days became the same.
 ### Regarding the histogram, it may be seen that the center range (10000-15000), which contains the mean value, has a higher frequency, because there are more days with the average number os steps
 
+
 ## Are there differences in activity patterns between weekdays and weekends?
+
+### Adding new factor and plotting panel
 
 
 ```r
